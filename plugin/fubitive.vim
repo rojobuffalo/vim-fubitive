@@ -24,7 +24,7 @@ function! s:bitbucket_url(opts, ...) abort
   if path =~# '^\.git/refs/heads/'
     return root . '/commits/' . path[16:-1]
   elseif path =~# '^\.git/refs/tags/'
-    return root . '/src/' .path[15:-1]
+    return root . '/browse/' .path[15:-1]
   elseif path =~# '.git/\%(config$\|hooks\>\)'
     return root . '/admin'
   elseif path =~# '^\.git\>'
@@ -36,10 +36,11 @@ function! s:bitbucket_url(opts, ...) abort
     let commit = a:opts.commit
   endif
   if get(a:opts, 'type', '') ==# 'tree' || a:opts.path =~# '/$'
-    let url = s:sub(root . '/src/' . commit . '/' . path,'/$','')
+    let url = s:sub(root . '/browse/' . path . '?at=' . commit)
   elseif get(a:opts, 'type', '') ==# 'blob' || a:opts.path =~# '[^/]$'
-    let url = root . '/src/' . commit . '/' . path
+    let url = root . '/browse/' . path . 'at?=' . commit
     if get(a:opts, 'line1')
+      " let url .= '/' . fnamemodify(path, ':t') . '#' . a:opts.line1
       let url .= '/' . fnamemodify(path, ':t') . '#' . a:opts.line1
       if get(a:opts, 'line2')
         let url .= ':' . a:opts.line2
