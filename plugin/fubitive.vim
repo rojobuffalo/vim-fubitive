@@ -2,6 +2,10 @@ function! s:function(name) abort
   return function(substitute(a:name,'^s:',matchstr(expand('<sfile>'), '<SNR>\d\+_'),''))
 endfunction
 
+" fix issue where squarespace hosted URLs look like
+" `{hostname}/projects/CEM/repos/{project}`
+" instead of `{hostname}/scm/cem/{project}`
+
 function! s:bitbucket_url(opts, ...) abort
   if a:0 || type(a:opts) != type({})
     return ''
