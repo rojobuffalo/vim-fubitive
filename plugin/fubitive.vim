@@ -16,7 +16,10 @@ function! s:bitbucket_url(opts, ...) abort
   for domain in domains
     let domain_pattern .= '\|' . escape(split(domain, '://')[-1], '.')
   endfor
-  let repo = matchstr(a:opts.remote,'^\%(https\=://\|git://\|\(ssh://\)\=git@\)\%(.\{-\}@\)\=\zs\('.domain_pattern.'\)[/:].\{-\}\ze\%(\.git\)\=$')
+  let repo_matched = matchstr(a:opts.remote,'^\%(https\=://\|git://\|\(ssh://\)\=git@\)\%(.\{-\}@\)\=\zs\('.domain_pattern.'\)[/:].\{-\}\ze\%(\.git\)\=$')
+  " Squarespace's hosted Bitbucket projects have different URLs for the git
+  " remote address and browser address. This next line substitutes the difference.
+  let repo = substitute(repo_matched,'scm/cec/','projects/CEM/repos/','')
   if repo ==# ''
     return ''
   endif
