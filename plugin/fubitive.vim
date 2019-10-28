@@ -18,7 +18,7 @@ function! s:bitbucket_url(opts, ...) abort
   " and browser address. This next line substitutes the difference:
   " `{hostname}/scm/cem/{project}` -> `{hostname}/projects/CEM/repos/{project}`
   " TODO: isolate this substitution for only the squarespace root in g:fugitive_bitbucket_domains
-  let repo = substitute(repo_matched,'scm/cec/','projects/CEM/repos/','')
+  let repo = substitute(repo_matched,'scm/cem/','projects/CEM/repos/','')
   "
   if repo ==# ''
     return ''
