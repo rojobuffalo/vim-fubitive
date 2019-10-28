@@ -2,10 +2,6 @@ function! s:function(name) abort
   return function(substitute(a:name,'^s:',matchstr(expand('<sfile>'), '<SNR>\d\+_'),''))
 endfunction
 
-" fix issue where squarespace hosted URLs look like
-" `{hostname}/projects/CEM/repos/{project}`
-" instead of `{hostname}/scm/cem/{project}`
-
 function! s:bitbucket_url(opts, ...) abort
   if a:0 || type(a:opts) != type({})
     return ''
@@ -17,9 +13,13 @@ function! s:bitbucket_url(opts, ...) abort
     let domain_pattern .= '\|' . escape(split(domain, '://')[-1], '.')
   endfor
   let repo_matched = matchstr(a:opts.remote,'^\%(https\=://\|git://\|\(ssh://\)\=git@\)\%(.\{-\}@\)\=\zs\('.domain_pattern.'\)[/:].\{-\}\ze\%(\.git\)\=$')
-  " Squarespace's hosted Bitbucket projects have different URLs for the git
-  " remote address and browser address. This next line substitutes the difference.
+  "
+  " Squarespace's hosted Bitbucket projects have different URLs for the git remote address
+  " and browser address. This next line substitutes the difference:
+  " `{hostname}/scm/cem/{project}` -> `{hostname}/projects/CEM/repos/{project}`
+  " TODO: isolate this substitution for only the squarespace root in g:fugitive_bitbucket_domains
   let repo = substitute(repo_matched,'scm/cec/','projects/CEM/repos/','')
+  "
   if repo ==# ''
     return ''
   endif
