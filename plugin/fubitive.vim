@@ -38,7 +38,7 @@ function! s:bitbucket_url(opts, ...) abort
   if get(a:opts, 'type', '') ==# 'tree' || a:opts.path =~# '/$'
     let url = s:sub(root . '/browse/' . path,'/$','' . '?at=' . commit)
   elseif get(a:opts, 'type', '') ==# 'blob' || a:opts.path =~# '[^/]$'
-    let url = root . '/browse/' . path . 'at?=' . commit
+    let url = root . '/browse/' . path . '?at=' . commit
     if get(a:opts, 'line1')
       " let url .= '/' . fnamemodify(path, ':t') . '#' . a:opts.line1
       let url .= '/' . fnamemodify(path, ':t') . '#' . a:opts.line1
